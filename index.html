@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript DOM Methods & Properties (Myanmar)</title>
+    
+    <!-- RevealJS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <!-- RevealJS Theme (Night theme for modern tech look) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/night.css" id="theme">
+    <!-- HighlightJS Theme for Code block -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Padauk for Myanmar -->
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Styles for better readability and aesthetics */
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        .reveal, .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+            font-family: 'Pyidaungsu', 'Padauk', Tahoma, Arial, sans-serif;
+            text-transform: none; /* Keep original casing */
+            letter-spacing: normal;
+        }
+        .reveal h1 { font-size: 2.5em; color: #f7df1e; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .reveal h2 { font-size: 1.8em; color: #61dafb; }
+        .reveal h3 { font-size: 1.4em; color: #ff7675; }
+        .reveal p, .reveal li { font-size: 0.9em; line-height: 1.6; text-align: left; }
+        .reveal p { margin-bottom: 20px; }
+        
+        .code-box {
+            background-color: #282c34;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+        .reveal pre {
+            width: 100%;
+            margin: 0;
+            box-shadow: none;
+        }
+        .reveal pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            line-height: 1.4;
+            padding: 10px;
+        }
+        .highlight { color: #f7df1e; font-weight: bold; }
+        
+        /* Grid Layout for some slides */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        
+        /* Slide Counter adjustments */
+        .reveal .slide-number { font-size: 24px; background-color: rgba(0,0,0,0.7); }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+        <!-- Slide 1 -->
+        <section data-transition="zoom">
+            <i class="fab fa-js-square" style="font-size: 100px; color: #f7df1e; margin-bottom: 20px;"></i>
+            <h1>JavaScript DOM</h1>
+            <h3>Methods & Properties အပြည့်အစုံ</h3>
+            <p style="text-align: center; margin-top: 40px; color: #ccc;">လေ့လာရန် အဆင်သင့်ဖြစ်ပြီလား?</p>
+        </section>
+
+        <!-- Slide 2 -->
+        <section data-transition="slide">
+            <h2><i class="fas fa-question-circle"></i> DOM ဆိုတာ ဘာလဲ?</h2>
+            <p>DOM (Document Object Model) ဆိုတာ HTML document ကြီးတစ်ခုလုံးကို JavaScript ကနေ လှမ်းပြီး ထိန်းချုပ်ပြင်ဆင်လို့ရအောင် Browser က တည်ဆောက်ပေးထားတဲ့ <b>Object Tree</b> ဖြစ်ပါတယ်။</p>
+            <p>DOM ကိုအသုံးပြုပြီး HTML elements တွေကို အသစ်ထည့်တာ၊ ဖျက်တာ၊ ပြင်တာ၊ CSS style တွေပြောင်းတာ အကုန်လုပ်လို့ရပါတယ်။</p>
+        </section>
+
+        <!-- Slide 3 -->
+        <section>
+            <h2>DOM Tree Structure</h2>
+            <p>HTML document တစ်ခုလုံးကို သစ်ပင် (Tree) ပုံစံ ဖွဲ့စည်းထားပါတယ်။</p>
+            <ul>
+                <li><span class="highlight">Document</span> - အမြစ် (Root)</li>
+                <li><span class="highlight">Elements</span> - အကိုင်းအခက်များ (html, head, body, div, p)</li>
+                <li><span class="highlight">Text</span> - အရွက်များ (စာသားများ)</li>
+            </ul>
+        </section>
+
+        <!-- Slide 4 -->
+        <section>
+            <h2>Window vs Document</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Window Object</h3>
+                    <p>Browser ရဲ့ ပြတင်းပေါက် (Tab) ကို ကိုယ်စားပြုပါတယ်။ Global object ဖြစ်ပါတယ်။</p>
+                </div>
+                <div>
+                    <h3>Document Object</h3>
+                    <p>Window ထဲမှာပြနေတဲ့ HTML စာမျက်နှာကို ကိုယ်စားပြုပါတယ်။ DOM ရဲ့ အစမှတ် (Entry point) ဖြစ်ပါတယ်။</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၁): Elements များကို ရွေးချယ်ခြင်း</h2>
+            <p style="text-align: center;">HTML tag တွေကို JavaScript ထဲရောက်အောင် လှမ်းဖမ်းတဲ့ Methods များ</p>
+        </section>
+
+        <!-- Slide 6 -->
+        <section>
+            <h2>1. getElementById()</h2>
+            <p>HTML ရဲ့ <code>id</code> attribute ကို အသုံးပြုပြီး Element ကို လှမ်းခေါ်တဲ့ Method ပါ။ တစ်ခုတည်းသော element ကိုပဲ return ပြန်ပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+// id="title" ရှိသော element ကို ရယူခြင်း
+const myTitle = document.getElementById('title');
+console.log(myTitle);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 7 -->
+        <section>
+            <h2>2. getElementsByClassName()</h2>
+            <p><code>class</code> နာမည်တူတဲ့ Elements တွေ အကုန်လုံးကို စုပြီး HTMLCollection (Array-like object) အနေနဲ့ ပြန်ပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+// class="items" ရှိသော element အားလုံးကို ရယူခြင်း
+const items = document.getElementsByClassName('items');
+// ပထမဆုံး item ကို ယူချင်လျှင်
+console.log(items[0]); 
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 8 -->
+        <section>
+            <h2>3. getElementsByTagName()</h2>
+            <p>HTML tag နာမည် (ဥပမာ - p, div, li) တွေကို အသုံးပြုပြီး elements တွေကို ရှာဖွေပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+// &lt;p&gt; tag အားလုံးကို ရယူခြင်း
+const paragraphs = document.getElementsByTagName('p');
+console.log(paragraphs.length); // p ဘယ်နှခုရှိလဲ ကြည့်ရန်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 9 -->
+        <section>
+            <h2>4. querySelector()</h2>
+            <p>CSS Selector (ဥပမာ - .class, #id, tag) တွေကို အသုံးပြုပြီး ရှာဖွေပါတယ်။ တွေ့တဲ့အထဲက <span class="highlight">ပထမဆုံး တစ်ခုကိုသာ</span> ပြန်ပေးပါတယ်။ အသုံးအများဆုံးပါ။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const firstItem = document.querySelector('.item'); // class
+const title = document.querySelector('#title'); // id
+const firstBtn = document.querySelector('button'); // tag
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 10 -->
+        <section>
+            <h2>5. querySelectorAll()</h2>
+            <p>CSS Selector နဲ့ ကိုက်ညီတဲ့ Elements <span class="highlight">အားလုံးကို</span> NodeList အနေနဲ့ ပြန်ပေးပါတယ်။ forEach နဲ့ ပတ်လို့ရပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const allItems = document.querySelectorAll('.list-item');
+allItems.forEach(item => {
+    item.style.color = 'red';
+});
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 11 -->
+        <section>
+            <h2>HTMLCollection vs NodeList</h2>
+            <ul>
+                <li><b>HTMLCollection:</b> <code>getElementsBy...</code> တွေက ပြန်ပေးတယ်။ Array method တွေ (forEach) သုံးလို့မရဘူး။ Live ဖြစ်တယ်။</li>
+                <li><b>NodeList:</b> <code>querySelectorAll</code> က ပြန်ပေးတယ်။ <code>forEach</code> သုံးလို့ရတယ်။ Static ဖြစ်တယ်။</li>
+            </ul>
+        </section>
+
+        <!-- Slide 12 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၂): DOM Traversing</h2>
+            <p style="text-align: center;">Element တစ်ခုကနေ အထက်၊ အောက်၊ ဘေးဘယ်ညာ ကို သွားလာခြင်း Property များ</p>
+        </section>
+
+        <!-- Slide 13 -->
+        <section>
+            <h2>6. parentNode</h2>
+            <p>လက်ရှိ Element ရဲ့ အထက်က မိဘ (Parent) Node ကို ပြန်ပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const child = document.querySelector('.child');
+console.log(child.parentNode); 
+// ၎င်း၏ အထက် div ကို ပြပေးမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 14 -->
+        <section>
+            <h2>7. parentElement</h2>
+            <p><code>parentNode</code> နဲ့ အတူတူပါပဲ၊ ဒါပေမယ့် သူက HTML Element အစစ်ဖြစ်မှသာ ပြန်ပေးပါတယ်။ (များသောအားဖြင့် parentElement ကိုပဲ သုံးကြပါတယ်)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const listItem = document.querySelector('li');
+const ulElement = listItem.parentElement;
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 15 -->
+        <section>
+            <h2>8. children</h2>
+            <p>လက်ရှိ Element ရဲ့ အောက်မှာရှိတဲ့ သားသမီး (Child) HTML elements အားလုံးကို HTMLCollection အနေနဲ့ ပြန်ပေးပါတယ်။ Text node တွေ မပါဝင်ပါ။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+console.log(list.children); // <li> အားလုံးကို ပြမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 16 -->
+        <section>
+            <h2>9. childNodes</h2>
+            <p>Element အောက်မှာရှိတဲ့ Node တွေအားလုံးကို ပြပေးပါတယ်။ (Space တွေ၊ Enter ခေါက်ထားတဲ့ Text Node အလွတ်တွေပါ အကုန်ပါဝင်ပါတယ်)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+console.log(list.childNodes); // NodeList ကို ပြမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 17 -->
+        <section>
+            <h2>10. firstElementChild</h2>
+            <p>မိဘ Element တစ်ခုရဲ့ ပထမဆုံးသော Child <b>HTML Element</b> ကိုသာ ရယူပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+const firstLi = list.firstElementChild;
+firstLi.style.fontWeight = 'bold';
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 18 -->
+        <section>
+            <h2>11. lastElementChild</h2>
+            <p>မိဘ Element ရဲ့ နောက်ဆုံး Child HTML Element ကို ရယူပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+const lastLi = list.lastElementChild;
+lastLi.style.color = 'blue';
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 19 -->
+        <section>
+            <h2>12. nextElementSibling</h2>
+            <p>လက်ရှိ Element ရဲ့ အဆင့်တူ (Sibling) ဖြစ်တဲ့ <b>နောက်တစ်ခု</b>ကို ဆက်ယူပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const item2 = document.querySelector('.item-2');
+const item3 = item2.nextElementSibling;
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 20 -->
+        <section>
+            <h2>13. previousElementSibling</h2>
+            <p>လက်ရှိ Element ရဲ့ အဆင့်တူဖြစ်တဲ့ <b>အရှေ့ကတစ်ခု</b>ကို ရယူပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const item2 = document.querySelector('.item-2');
+const item1 = item2.previousElementSibling;
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 21 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၃): Elements များကို ပြင်ဆင်ခြင်း</h2>
+            <p style="text-align: center;">စာသားတွေပြောင်းမယ်၊ HTML တွေ အစားထိုးမယ်</p>
+        </section>
+
+        <!-- Slide 22 -->
+        <section>
+            <h2>14. innerHTML</h2>
+            <p>Element အတွင်းက HTML code တွေကို ရယူဖို့ (သို့) အသစ်ထည့်သွင်းဖို့ သုံးပါတယ်။ HTML tag တွေကို သိပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const box = document.querySelector('.box');
+box.innerHTML = '<h2>Hello World</h2>'; // H2 tag အလုပ်လုပ်မည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 23 -->
+        <section>
+            <h2>15. textContent</h2>
+            <p>Element အတွင်းက စာသားသက်သက်ကိုသာ ပြင်ဆင်/ရယူ ပါတယ်။ HTML tag တွေ ထည့်ရေးရင် စာသားအနေနဲ့ပဲ ပေါ်ပါမယ်။ (Security အတွက် ပိုကောင်းပါတယ်)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const box = document.querySelector('.box');
+box.textContent = 'Hello World'; 
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 24 -->
+        <section>
+            <h2>16. innerText</h2>
+            <p><code>textContent</code> နဲ့ ဆင်တူပါတယ်။ သို့သော် သူက CSS နဲ့ ဖျောက်ထားတဲ့ (display: none) စာသားတွေကို မဖတ်ပါဘူး။ Browser မှာ မြင်ရတဲ့အတိုင်းပဲ ယူပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const para = document.querySelector('p');
+console.log(para.innerText);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 25 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၄): Elements အသစ်ဖန်တီးခြင်း</h2>
+            <p style="text-align: center;">JavaScript ဖြင့် HTML tag များကို အသစ်ဖန်တီးခြင်း</p>
+        </section>
+
+        <!-- Slide 26 -->
+        <section>
+            <h2>17. createElement()</h2>
+            <p>HTML element (tag) အသစ်တစ်ခုကို ဖန်တီးပေးပါတယ်။ Document ထဲကိုတော့ မရောက်သေးပါဘူး၊ Memory ထဲမှာပဲ ရှိပါသေးတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+// <div> အသစ်ဖန်တီးခြင်း
+const newDiv = document.createElement('div');
+newDiv.className = 'my-new-div';
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 27 -->
+        <section>
+            <h2>18. createTextNode()</h2>
+            <p>HTML tag မပါတဲ့ စာသားသက်သက် (Text Node) အသစ်တစ်ခု ဖန်တီးပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const myText = document.createTextNode('This is new text');
+// newDiv.appendChild(myText);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 28 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၅): Elements များကို ထည့်သွင်းခြင်း</h2>
+            <p style="text-align: center;">ဖန်တီးထားသော Element များကို နေရာချခြင်း</p>
+        </section>
+
+        <!-- Slide 29 -->
+        <section>
+            <h2>19. appendChild()</h2>
+            <p>Element တစ်ခုရဲ့ နောက်ဆုံးအဆုံး (Last child) အဖြစ် သွားရောက် ထည့်သွင်းပေးပါတယ်။ Node တစ်ခုတည်းသာ ထည့်လို့ရပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+const newLi = document.createElement('li');
+newLi.textContent = 'New Item';
+
+list.appendChild(newLi); // အောက်ဆုံးမှာ သွားပေါ်မည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 30 -->
+        <section>
+            <h2>20. append()</h2>
+            <p><code>appendChild</code> နဲ့ တူပေမယ့် သူက Node တွေရော၊ Text String တွေပါ တစ်ပြိုင်နက်တည်း အများကြီး ထည့်လို့ရပါတယ်။ (ခေတ်သစ် Method ပါ)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const box = document.querySelector('.box');
+box.append('Some text', document.createElement('p'));
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 31 -->
+        <section>
+            <h2>21. prepend()</h2>
+            <p>Element ရဲ့ <b>ပထမဆုံးနေရာ</b> (First child) အဖြစ် ထိပ်ဆုံးကနေ သွားရောက် ထည့်သွင်းပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+const newLi = document.createElement('li');
+newLi.textContent = 'First Item';
+
+list.prepend(newLi); // ထိပ်ဆုံးမှာ သွားပေါ်မည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 32 -->
+        <section>
+            <h2>22. insertBefore()</h2>
+            <p>Element တစ်ခုရဲ့ အရှေ့တိတိမှာ နေရာချချင်တဲ့အခါ သုံးပါတယ်။ (ထည့်ချင်သောအရာ, ဘယ်အရာရှေ့မှာလဲ)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const parent = document.getElementById('parent');
+const newNode = document.createElement('div');
+const referenceNode = document.getElementById('child2');
+
+parent.insertBefore(newNode, referenceNode);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 33 -->
+        <section>
+            <h2>23. insertAdjacentHTML()</h2>
+            <p>HTML string တွေကို သတ်မှတ်ထားတဲ့ နေရာ ၄ နေရာထဲက တစ်နေရာမှာ အတိအကျ ထည့်ပေးပါတယ်။ အရမ်းမြန်ပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const box = document.querySelector('.box');
+// 'beforebegin', 'afterbegin', 'beforeend', 'afterend'
+box.insertAdjacentHTML('beforeend', '<p>New Para</p>');
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 34 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၆): Elements များကို ဖယ်ရှားခြင်း</h2>
+            <p style="text-align: center;">မလိုအပ်တော့တဲ့ HTML တွေကို ဖြုတ်ချမယ်</p>
+        </section>
+
+        <!-- Slide 35 -->
+        <section>
+            <h2>24. removeChild()</h2>
+            <p>မိဘ Element ကနေတစ်ဆင့် သားသမီး Element ကို ရွေးချယ်ပြီး ဖယ်ရှားပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const list = document.querySelector('ul');
+const itemToRemove = list.firstElementChild;
+
+list.removeChild(itemToRemove);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 36 -->
+        <section>
+            <h2>25. remove()</h2>
+            <p>လက်ရှိ Element ကိုယ်တိုင်ကို တိုက်ရိုက် ဖျက်ပစ်လိုက်ပါတယ်။ (ES6 Method ပါ၊ သုံးရတာ ပိုလွယ်ကူပါတယ်)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const alertBox = document.querySelector('.alert');
+alertBox.remove(); // ပျောက်သွားမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 37 -->
+        <section>
+            <h2>26. replaceChild()</h2>
+            <p>ရှိပြီးသား Element အဟောင်းကို အသစ်တစ်ခုနဲ့ အစားထိုးပါတယ်။ (အသစ်, အဟောင်း)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const parent = document.getElementById('parent');
+const newChild = document.createElement('span');
+const oldChild = document.getElementById('old');
+
+parent.replaceChild(newChild, oldChild);
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 38 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၇): Attributes များကို အသုံးပြုခြင်း</h2>
+            <p style="text-align: center;">id, src, href စသည်တို့ကို ပြင်ဆင်ခြင်း</p>
+        </section>
+
+        <!-- Slide 39 -->
+        <section>
+            <h2>27. getAttribute()</h2>
+            <p>Element ရဲ့ Attribute တန်ဖိုး (Value) ကို လှမ်းယူပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const img = document.querySelector('img');
+const imgSrc = img.getAttribute('src');
+console.log(imgSrc); 
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 40 -->
+        <section>
+            <h2>28. setAttribute()</h2>
+            <p>Attribute အသစ်တစ်ခု ထည့်ပေးတာ သို့မဟုတ် ရှိပြီးသားကို တန်ဖိုးအသစ် ချိန်းပေးတာ လုပ်ပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const link = document.querySelector('a');
+link.setAttribute('href', 'https://google.com');
+link.setAttribute('target', '_blank');
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 41 -->
+        <section>
+            <h2>29. removeAttribute()</h2>
+            <p>မလိုအပ်တော့တဲ့ Attribute ကို ဖျက်ပစ်ပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const input = document.querySelector('input');
+input.removeAttribute('disabled'); // စာပြန်ရိုက်လို့ရသွားမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 42 -->
+        <section>
+            <h2>30. hasAttribute()</h2>
+            <p>ဒီ Element မှာ သတ်မှတ်ထားတဲ့ Attribute ရှိ/မရှိ (true / false) ပြန်စစ်ပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const btn = document.querySelector('button');
+if(btn.hasAttribute('disabled')) {
+    console.log('Button is locked!');
+}
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 43 -->
+        <section data-transition="fade">
+            <h2 style="color: #f7df1e;">အပိုင်း (၈): CSS နှင့် Class များ ပြင်ဆင်ခြင်း</h2>
+            <p style="text-align: center;">DOM ကိုအသုံးပြုပြီး ဒီဇိုင်းများ ချက်ချင်းပြောင်းလဲခြင်း</p>
+        </section>
+
+        <!-- Slide 44 -->
+        <section>
+            <h2>31. element.style (Inline Styles)</h2>
+            <p>CSS properties တွေကို JavaScript ကနေ တိုက်ရိုက်လှမ်းပြင်တာပါ။ <code>background-color</code> ကို <code>backgroundColor</code> လို့ CamelCase ရေးရပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const box = document.querySelector('.box');
+box.style.backgroundColor = 'blue';
+box.style.fontSize = '20px';
+box.style.display = 'none'; // ဖျောက်ထားမည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 45 -->
+        <section>
+            <h2>32. className Property</h2>
+            <p>Element ရဲ့ Class တွေ အားလုံးကို String တစ်ခုအနေနဲ့ ရယူတာ၊ ပြန်သတ်မှတ်တာ လုပ်လို့ရပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const div = document.querySelector('div');
+div.className = 'box active highlight'; // အဟောင်းတွေ ပျက်သွားနိုင်သည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 46 -->
+        <section>
+            <h2>33. classList.add()</h2>
+            <p>Class အသစ်တစ်ခု (သို့) အများကြီးကို Element ထဲ ထပ်ထည့်ပေးပါတယ်။ (ရှိပြီးသား Class တွေ မပျက်ပါ)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const modal = document.querySelector('.modal');
+modal.classList.add('show', 'animate');
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 47 -->
+        <section>
+            <h2>34. classList.remove()</h2>
+            <p>သတ်မှတ်ထားတဲ့ Class ကို ဖယ်ရှားပေးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const modal = document.querySelector('.modal');
+modal.classList.remove('show'); // ဖျောက်လိုက်မည်
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 48 -->
+        <section>
+            <h2>35. classList.toggle()</h2>
+            <p>အရမ်းအသုံးဝင်ပါတယ်။ Class မရှိရင် ထည့်ပေးမယ်၊ ရှိနေရင် ဖြုတ်ပေးပါမယ်။ (On/Off ခလုတ်တွေမှာ သုံးပါတယ်)</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const btn = document.querySelector('.theme-btn');
+btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 49 -->
+        <section>
+            <h2>36. classList.contains()</h2>
+            <p>ဒီ Class ပါဝင်နေသလား ဆိုတာကို true / false ပြန်ပေးပါတယ်။ စစ်ဆေးချင်တဲ့အခါ သုံးပါတယ်။</p>
+            <div class="code-box">
+<pre><code class="language-javascript">
+const menu = document.querySelector('.menu');
+if(menu.classList.contains('active')) {
+    console.log('Menu ဖွင့်ထားတယ်');
+}
+</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 50 -->
+        <section data-transition="zoom">
+            <h1><i class="fas fa-check-circle" style="color: #4CAF50;"></i></h1>
+            <h2>အောင်မြင်စွာ ပြီးဆုံးပါပြီ!</h2>
+            <p>JavaScript DOM ရဲ့ အရေးကြီးတဲ့ Method တွေနဲ့ Property တွေကို သိရှိသွားပါပြီ။</p>
+            <h4 style="color: #61dafb;">ကျေးဇူးတင်ပါသည်</h4>
+        </section>
+
+    </div>
+</div>
+
+<!-- RevealJS JS -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+<!-- RevealJS Highlight Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+<script>
+    Reveal.initialize({
+        width: 1100,      // Slide Width
+        height: 700,      // Slide Height
+        margin: 0.1,      // Margin around slide
+        hash: true,       // URL hash updates
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        slideNumber: 'c/t',  // Current / Total slide number format
+        center: true,     // Center content vertically
+        plugins: [ RevealHighlight ]
+    });
+</script>
+
+</body>
+</html>
